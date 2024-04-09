@@ -1,0 +1,25 @@
+BrierSkillScore:
+  args:
+    input_logits: ${model.args.out_logits}
+TrueSkillStatistic:
+  args:
+    input_logits: ${model.args.out_logits}
+    threshold: ${shared.prob_threshold}
+BestTrueSkillStatistic:
+  args:
+    input_logits: ${model.args.out_logits}
+ConfusionMatrix:
+  args:
+    input_logits: ${model.args.out_logits}
+    threshold: ${shared.prob_threshold}
+    class_names: ${shared.class_names}
+ROC:
+  args:
+    input_logits: ${model.args.out_logits}
+    labels: ${shared.class_names}
+AUC:
+  args:
+    input_logits: ${model.args.out_logits}
+AveragePrecisionScore:
+  args:
+    input_logits: ${model.args.out_logits}

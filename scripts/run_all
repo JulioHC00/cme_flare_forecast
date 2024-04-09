@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Print that we're loading SWAN features
+# echo "Loading SWAN features"
+# python3 scripts/load_sharps_to_db.py
+#
+# echo "Padding features"
+# python3 scripts/pad_features.py
+
+T_VALS=(24)
+#L=(2 8 12 24)
+L=(24)
+S=("0.2")
+B=0
+MIN_FLARE_CLASS=30
+ALLOW_OVERLAPS=1
+
+for a in "${T_VALS[@]}"; do
+	for b in "${L[@]}"; do
+		for c in "${S[@]}"; do
+			echo "Creating dataset with T = $a and L = $b and S = $c"
+			# python3 scripts/flare_cme_yes_no_dataset.py T=$a L=$b S=$c B=$B MIN_FLARE_CLASS=$MIN_FLARE_CLASS ALLOW_OVERLAPS=$ALLOW_OVERLAPS
+			python3 scripts/flare_and_cme_dataset.py T=$a L=$b S=$c B=$B MIN_FLARE_CLASS=$MIN_FLARE_CLASS ALLOW_OVERLAPS=$ALLOW_OVERLAPS
+		done
+	done
+done

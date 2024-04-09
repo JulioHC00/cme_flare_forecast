@@ -1,0 +1,11 @@
+TrueSkillStatisticProfile:
+  args:
+    input_logits: ${model.args.out_logits}
+PlotBinaryTimeseries:
+  args:
+    n_plots: 12
+    input_logits: ${model.args.out_logits}
+    prob_threshold: ${shared.prob_threshold}
+PrecisionRecallCurve:
+  args:
+    input_logits: ${model.args.out_logits}

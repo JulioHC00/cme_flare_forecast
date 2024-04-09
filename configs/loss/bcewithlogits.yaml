@@ -1,0 +1,5 @@
+name: "bcewithlogits"
+args:
+  cost_sensitive: true
+  reduction: "mean"
+  pos_weight: 1

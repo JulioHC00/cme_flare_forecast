@@ -1,0 +1,41 @@
+train:
+  name: default
+  args:
+    batch_size: ${data.batch_size}
+    num_workers: ${data.num_workers}
+    pin_memory: true
+  sampler:
+    name: "weightedrandomsampler"
+    args:
+      replacement: true
+  collate_fn:
+    name: "collate_metadata"
+    args: {}
+
+val:
+  name: default
+  args:
+    batch_size: ${data.batch_size}
+    shuffle: true
+    num_workers: ${data.num_workers}
+    pin_memory: true
+  sampler:
+    name: default
+    args: {}
+  collate_fn:
+    name: "collate_metadata"
+    args: {}
+
+test:
+  name: default
+  args:
+    batch_size: ${data.batch_size}
+    shuffle: true
+    num_workers: ${data.num_workers}
+    pin_memory: true
+  sampler:
+    name: default
+    args: {}
+  collate_fn:
+    name: "collate_metadata"
+    args: {}

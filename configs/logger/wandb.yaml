@@ -1,0 +1,7 @@
+name: "wandb"
+args:
+  mode: "online"
+  project: ${project}
+  metrics_conf: ${metrics}
+  plotter_conf: ${plotting}
+  best_run_metric: "BestTrueSkillStatistic"

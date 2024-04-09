@@ -1,0 +1,63 @@
+defaults:
+  - _self_
+  - data/dataset: SWAN/cme_forecast
+  - data/data_loader: default_sampler
+  - optimizer: adam
+  - model: lstm_mha_forecast_model
+  - metrics: binary_classification # Must be before logger
+  - plotting: binary_classification # Must be before logger
+  - logger: wandb
+  - loss: bcewithlogits
+  - scheduler: cycliclr
+  - local: local
+
+hydra:
+  run:
+    dir: ./out/${problem_type}/${data.main.T}/${model.name}
+  job:
+    chdir: true # So working directory is in the output directory
+
+cross_validation:
+  db_path: ../../results.db
+  table: ${model.name}_${eval:'str(int(${data.main.T}))'}
+  checkpoints_extra_sub_folders: []
+  use_checkpoints: false
+  checkpoints_db_path: "/home/jhc/cmeml/out/flare_forecast/results.db"
+  checkpoints_table: "rotary_transformer_24_batchnorm"
+
+project: "Final CME Forecasting CV"
+problem_type: "cme_forecast"
+seed: 011234581321
+
+shared:
+  class_names: ["CME", "No CME"]
+  prob_threshold: 0.5
+  device: "cuda:1"
+
+train:
+  n_epochs: 40
+  checkpoint_every_n_epochs: 2
+  load_checkpoint: false
+  checkpoint_path: ""
+  early_stop:
+    enabled: true
+    args:
+      patience: 10
+      per_min_delta: 0.01
+      criterion: "min"
+
+data:
+  batch_size: 256
+  num_workers: 6
+  main:
+    T: 24
+    L: 12
+    S: 0.2
+    B: 0
+    C: 0.2
+    MIN_FLARE_CLASS: 30
+    ALLOW_OVERLAPS: 1
+    padding_strategy: "zero"
+    keywords: "default"
+    use_PCA: false
+    n_PCA_components: 28

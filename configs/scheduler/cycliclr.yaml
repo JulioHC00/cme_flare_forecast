@@ -1,0 +1,8 @@
+name: "CyclicLR"
+call_on: "batch"
+args:
+  base_lr: 0.000002
+  max_lr: 0.00002
+  step_size_up: 3 # This is times steps in epoch. recommended between 2 and 10
+  cycle_momentum: False
+  mode: "triangular"

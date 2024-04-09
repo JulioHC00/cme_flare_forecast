@@ -1,0 +1,41 @@
+common_args: &common_args
+  db_path: ${local.db_path}
+  T: ${data.main.T}
+  L: ${data.main.L}
+  S: ${data.main.S}
+  B: ${data.main.B}
+  C: ${data.main.C}
+  MIN_FLARE_CLASS: ${data.main.MIN_FLARE_CLASS}
+  ALLOW_OVERLAPS: ${data.main.ALLOW_OVERLAPS}
+  padding_strategy: ${data.main.padding_strategy}
+  keywords: ${data.main.keywords}
+  # not_keywords: ["CMEhis", "Bdec", "Bhis", "Bhis1d", "Cdec", "Chis", "Chis1d", "Mdec", "Mhis", "Mhis1d", "Xdec", "Xhis", "Xhis1d", "Edec", "logEdec", "CMEdec", "CMEhis1d"]
+  not_keywords: ["Bhis1d"]
+  # not_keywords: []
+  use_PCA: ${data.main.use_PCA}
+  n_PCA_components: ${data.main.n_PCA_components}
+
+train:
+  name: ["swan", "flare_class"]
+  args:
+    <<: *common_args
+    mode: "train"
+    splits: [0, 1, 2, 3, 4, 5, 6, 7]
+    noise_level: 0.05
+    use_only_active: true
+
+val:
+  name: ["swan", "flare_class"]
+  args:
+    <<: *common_args
+    mode: "val"
+    splits: [8, 9]
+    use_only_active: false
+
+test:
+  name: ["swan", "flare_class"]
+  args:
+    <<: *common_args
+    mode: "test"
+    splits: [9]
+    use_only_active: false

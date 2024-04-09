@@ -1,0 +1,20 @@
+name: "rotary_transformer"
+args:
+  input_size: 0
+  n_transformer_blocks: 2
+  out_logits: true
+  avg_pool: false
+  mask_invalid: true
+  pre_fc_dropout: 0.2
+  transformer_block_args:
+    input_shape: 0
+    num_heads: 4
+    ff_dim: 4
+    dropout: 0.2
+    norm: "layer"
+  fc_args:
+    input_features: 0
+    classifier_layers: []
+    dropout_rates: 0
+    norm: "layer"
+    output_features: 1
