@@ -14,10 +14,10 @@ from bisect import bisect_left, bisect_right
 from tqdm import tqdm
 from typing import List, Tuple, Union, NamedTuple, Optional, Any
 
-CMESRC_V3 = "/home/julio/cmesrc/data/processed/final_results/cmesrcV3.db"
-FEATURES = "/home/julio/cmeml_experiments/experiment2/data/features.db"
+CMESRC = "data/cmesrc.db"
+FEATURES = "data/features.db"
 
-output_figs_dir = "/home/julio/cmeml_experiments/experiment2/logs/dataset_figs/"
+output_figs_dir = "logs/dataset_figs/"
 
 
 def setup_database(cur, final_table_name):
@@ -66,7 +66,7 @@ def setup_database(cur, final_table_name):
 
 
 def create_indices():
-    conn = sqlite3.connect(CMESRC_V3)
+    conn = sqlite3.connect(CMESRC)
     cur = conn.cursor()
 
     cur.execute(
@@ -939,7 +939,7 @@ def main(TESTING: bool):
 
     conn = sqlite3.connect(FEATURES)
     cur = conn.cursor()
-    cur.execute(f"ATTACH DATABASE '{CMESRC_V3}' AS cmesrc")
+    cur.execute(f"ATTACH DATABASE '{CMESRC}' AS cmesrc")
 
     FINAL_TABLE_NAME = f"""T_{formatted_T}_L_{formatted_L}_S_{formatted_S}_B_{formatted_B}_OVERLAPS_{int(ALLOW_OVERLAPS)}_MIN_FLARE_{MIN_FLARE_CLASS}_dataset"""
 

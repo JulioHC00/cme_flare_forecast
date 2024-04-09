@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 db_path = "data/features.db"
 
-cmesrc_db_path = "/home/julio/cmesrc/data/processed/cmesrcV3.db"
+cmesrc_db_path = "data/cmesrc.db"
 
 conn = sqlite3.connect(db_path)
 cur = conn.cursor()
