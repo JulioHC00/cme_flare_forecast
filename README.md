@@ -13,11 +13,11 @@ Data from SWAN is loaded into an sqlite database. For convenience this is alread
 1. `IS_TMFI`, which indicates whether the magnetic field features can be trusted (see **CITE** for details of what this means). Its value is 1 when they can be trusted and 0 otherwise. We require a value of 1.
 2. No SHARP keyword must have a missing value
 
-If both these conditions are met then `IS_VALID=1`. Else `IS_VALID=0` and that row won't be used in training.
+If both these conditions are met then `IS_VALID=1`. Else `IS_VALID=0` and that row won't be used in training. Non valid rows are not used for normalization and missing values are replaced with 0 everywhere.
 
 Additionally, we calculate a series of event history parameters as in **CITE**. These consist of three columns `dec`, `hist` and `hist1d` corresponding to an exponentially decaying history that exponentially decays to 1/e over 12 hours (see **CITE** for details), the total number of events and the number of events over the last day. These three columns are calculated independently for flares of class B, C, M and X (e.g. columns `Mdec`, `Mhis`, `Mhis1d`) along with CMEs. Additionally, columns `Edec` and `logEdec` are similar to the individual flare class columns but events are weighted by their X-ray flux (see **CITE**).
 
-The extra history features along with the `IS_VALID` flare are calculated using `scripts/pad_features.py`.
+The extra history features along with the `IS_VALID` flare are calculated using `scripts/pad_features.py`. For training, we use all features but `Bhis1d`. This is to ensure the number of features is divisible by the number of heads (4).
 
 ### Datasets
 
@@ -45,3 +45,7 @@ However, the mean and standard deviation must be calculated using only the train
 ## Model
 
 The model follows the transformer architecture as detailed in the paper. We make use of rotary positional encodings which are implemented in `src/models/parts/rotary_mha.py` using the implementation by [lucidrains/rotary-embedding-torch](https://github.com/lucidrains/rotary-embedding-torch). The basic transformer block is implemented in `src/models/parts/rotary_transformer_block.py` and the final model in `src/models/rotary_transformer.py`. We also make use of masked attention. This way, data entries with `IS_VALID=0` are not used at any point in the model and no attention is given to them. All configurations regarding the setup used to obtain the results of the paper can be found in the `configs` folder.
+
+## Training the model
+
+In order to train the models, we use the Adam optimizer and a cyclic scheduler that varies the learning rate from a minimum value up to a maximum value over a number of epochs and then back down to the base value. It also decreases the maximum value over each iteration. We use a cost-sensitive binary cross entropy loss function with logits, so our model outputs logits that need to be passed through a sigmoid to become the predictions. Additionally, we train using only event active regions for reasons detailed in the paper but we evaluate in all regions for a more realistic scenario. Full configurations are available in the `configs/` folder.
