@@ -8,7 +8,6 @@
 # python3 scripts/pad_features.py
 
 T_VALS=(24)
-#L=(2 8 12 24)
 L=(24)
 S=("0.2")
 B=0
