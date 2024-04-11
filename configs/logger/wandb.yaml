@@ -1,7 +1,7 @@
-name: "wandb"
+name: "wandb" # Use wandb for logging
 args:
-  mode: "online"
-  project: ${project}
-  metrics_conf: ${metrics}
-  plotter_conf: ${plotting}
-  best_run_metric: "BestTrueSkillStatistic"
+  mode: "online" # Set to disabled if not want any login
+  project: ${project} # Project where to save results
+  metrics_conf: ${metrics} # Configurations for metrics to track
+  plotter_conf: ${plotting} # Configurations for plot to track every epoch
+  best_run_metric: "BestTrueSkillStatistic" # Which metric to use to decide which epoch is the best

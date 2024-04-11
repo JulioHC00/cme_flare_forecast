@@ -1,4 +1,4 @@
 name: "Adam"
 args:
-  lr: 0.001
-  weight_decay: 0
+  lr: 0.001 # learning rate will be controled by scheduler
+  weight_decay: 0 # No weight decay

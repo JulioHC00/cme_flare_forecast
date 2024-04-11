@@ -1,8 +1,8 @@
-name: "CyclicLR"
+name: "CyclicLR" # Use cyclic scheduler that cycles several time between a minimum learning rate and a maximum one
 call_on: "batch"
 args:
-  base_lr: 0.000002
-  max_lr: 0.00002
-  step_size_up: 3 # This is times steps in epoch. recommended between 2 and 10
-  cycle_momentum: False
-  mode: "triangular"
+  base_lr: ${shared.scheduler_base_lr} # Minimum learning rate to use
+  max_lr: ${shared.scheduler_max_lr} # Maximum learning rate to use
+  step_size_up: ${shared.scheduler_step_size_up} # This is times steps in epoch (takes 3 epoch to go from minimum to maximum). recommended between 2 and 10
+  cycle_momentum: False # Needs to be false for Adam
+  mode: ${shared.scheduler_mode} # Triangular shape of the cycle

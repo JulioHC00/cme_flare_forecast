@@ -1,3 +1,4 @@
+# Plots to keep track of
 TrueSkillStatisticProfile:
   args:
     input_logits: ${model.args.out_logits}

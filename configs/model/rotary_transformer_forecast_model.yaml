@@ -1,20 +1,21 @@
 name: "rotary_transformer"
 args:
-  input_size: 0
-  n_transformer_blocks: 2
-  out_logits: true
-  avg_pool: false
-  mask_invalid: true
-  pre_fc_dropout: 0.2
-  transformer_block_args:
-    input_shape: 0
-    num_heads: 4
-    ff_dim: 4
-    dropout: 0.2
-    norm: "layer"
+  input_size: 0 # Input size (overriden in the code to the correct one)
+  n_transformer_blocks: 2 # Two transformer blocks
+  out_logits: true # Output logits for BCE with logits loss
+  avg_pool: false # Do not use avg pool, instead use a class token
+  mask_invalid: true # Mask invalid inputs so they're not used for any attention calculation
+  pre_fc_dropout: 0.2 # Dropout out of the transformer before the FC layer
+  fine_tuning: false # If true only the weights of the FC layer are updated
+  transformer_block_args: # Arguments for the transformer blocks
+    input_shape: 0 # Overriden in code to correct one
+    num_heads: 4 # 4 heads
+    ff_dim: 4 # Feedforward layers use a dimension of 4
+    dropout: 0.2 # With a dropout of 0.2
+    norm: "layer" # And a layernorm
   fc_args:
-    input_features: 0
-    classifier_layers: []
-    dropout_rates: 0
-    norm: "layer"
-    output_features: 1
+    input_features: 0 # Overriden to correct one in code
+    classifier_layers: [] # Go directly from transformer to output layer (could choose here how many neurons in each extra layer)
+    dropout_rates: 0 # No dropout
+    norm: "layer" # Layernorm
+    output_features: 1 # Output a single value

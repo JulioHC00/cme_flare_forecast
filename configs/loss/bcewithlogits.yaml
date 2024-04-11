@@ -1,5 +1,5 @@
 name: "bcewithlogits"
 args:
-  cost_sensitive: true
-  reduction: "mean"
-  pos_weight: 1
+  cost_sensitive: true # Cost sensitive
+  reduction: "mean" # Reduce by using mean of the loss of the batch
+  pos_weight: 1 # Here set to 1, will be overriden to num_negative_samples / num_positive_samples later on.

@@ -1,16 +1,16 @@
 train:
-  name: default
+  name: default # Use default samples
   args:
-    batch_size: ${data.batch_size}
-    shuffle: true
-    num_workers: ${data.num_workers}
-    pin_memory: true
+    batch_size: ${data.batch_size} # Batch size
+    shuffle: true # Shuffle data before sampling
+    num_workers: ${data.num_workers} # Number of workers that will pull data
+    pin_memory: true # Pin memory for faster data transfer
   sampler:
-    name: "default"
-    args: {}
+    name: "default" # Use default sampler
+    args: {} # No extra args
   collate_fn:
-    name: "collate_metadata"
-    args: {}
+    name: "collate_metadata" # Used to collate the metadata we provide along with the data
+    args: {} # No extra args
 
 val:
   name: default

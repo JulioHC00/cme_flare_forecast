@@ -1,63 +1,67 @@
 defaults:
   - _self_
-  - data/dataset: SWAN/cme_forecast
-  - data/data_loader: default_sampler
-  - optimizer: adam
-  - model: lstm_mha_forecast_model
-  - metrics: binary_classification # Must be before logger
-  - plotting: binary_classification # Must be before logger
-  - logger: wandb
-  - loss: bcewithlogits
-  - scheduler: cycliclr
-  - local: local
+  - data/dataset: SWAN/cme_forecast # Load cme_forecast dataset configuration
+  - data/data_loader: default_sampler # Load the default samples dataloader
+  - optimizer: adam # Use adam optimizer configuration
+  - model: rotary_transformer_forecast_model # Use the rotary encodings transformer model
+  - metrics: binary_classification # Must be before logger. Metrics to log
+  - plotting: binary_classification # Must be before logger. Plotters to log
+  - logger: wandb # Use wandb to log metrics and plots
+  - loss: bcewithlogits # Use bcewithlogits config for loss
+  - scheduler: cycliclr # Use cycliclr config for scheduler
+  - local: local # Loads local configuration (db_path)
 
 hydra:
   run:
-    dir: ./out/${problem_type}/${data.main.T}/${model.name}
+    dir: ./out/${problem_type}/${data.main.T}/${model.name} # Save outputs to out folder
   job:
     chdir: true # So working directory is in the output directory
 
 cross_validation:
-  db_path: ../../results.db
-  table: ${model.name}_${eval:'str(int(${data.main.T}))'}
-  checkpoints_extra_sub_folders: []
-  use_checkpoints: false
-  checkpoints_db_path: "/home/jhc/cmeml/out/flare_forecast/results.db"
-  checkpoints_table: "rotary_transformer_24_batchnorm"
+  db_path: ../../results.db # db where results about the run are stored. Relative to hydra.run.dir
+  table: ${model.name}_${eval:'str(int(${data.main.T}))'} # Table where results are stored
+  checkpoints_extra_sub_folders: [] # If any, subfolder created for each entry. Checkpoints stored there
+  use_checkpoints: false # Whether checkpoints are to be loaded before training
+  checkpoints_db_path: "/home/jhc/cmeml/out/flare_forecast/results.db" # If so, this is pointing to a db that tells the code where to find the checkpoints
+  checkpoints_table: "rotary_transformer_24_batchnorm" # And the table to use
 
-project: "Final CME Forecasting CV"
-problem_type: "cme_forecast"
-seed: 011234581321
+project: "Final CME Forecasting CV" # Project for wandb
+problem_type: "cme_forecast" # Problem type
+seed: 011234581321 # Seed for consistency
 
 shared:
-  class_names: ["CME", "No CME"]
-  prob_threshold: 0.5
-  device: "cuda:1"
+  class_names: ["CME", "No CME"] # For confusion matric
+  prob_threshold: 0.5 # Probability threshold for certain plots that require it. Used only for tracking
+  device: "cuda:1" # Run on cuda
+  scheduler_base_lr: 0.000005 # Minimum learning rate
+  scheduler_max_lr: 0.00001 # Maximum learning rate
+  scheduler_step_size_up: 3 # Cycle up every 3 epochs
+  scheduler_mode: "triangular2" # Use a decaying triangular shape
 
 train:
-  n_epochs: 40
-  checkpoint_every_n_epochs: 2
-  load_checkpoint: false
-  checkpoint_path: ""
+  n_epochs: 40 # 40 epochs maximum
+  checkpoint_every_n_epochs: 2 # Save a checkpoint every 2 epochs
+  load_checkpoint: false # Whether to load a checkpoint. Overriden by cross_validation configuration
+  checkpoint_path: "" # And the checkpoint path.  Overriden by cross_validation configuration
   early_stop:
-    enabled: true
+    enabled: true # Use early stop
     args:
-      patience: 10
-      per_min_delta: 0.01
-      criterion: "min"
+      patience: 10 # If 10 epochs without decreasing validation loss by at least 0.01 * initial loss then stop
+      per_min_delta: 0.01 # Multiplier of initial loss to be used as minimum decrease in validation loss
+      criterion: "min" # Needs to decrease, not increase
 
 data:
-  batch_size: 256
-  num_workers: 6
+  batch_size: 256 # Batch size
+  num_workers: 6 # Six workers
   main:
-    T: 24
-    L: 12
-    S: 0.2
-    B: 0
-    C: 0.2
-    MIN_FLARE_CLASS: 30
-    ALLOW_OVERLAPS: 1
-    padding_strategy: "zero"
-    keywords: "default"
-    use_PCA: false
-    n_PCA_components: 28
+    T: 24 # Forecast horizon of 24 hours
+    L: 24 # Observation window of 24 hours
+    S: 0.2 # Step of 12 minutes
+    B: 0 # No restrictions on time after events for observations
+    C: 0.4 # Cadence of 24 minutes
+    MIN_FLARE_CLASS: 30 # Minimum class M
+    ALLOW_OVERLAPS: 1 # allow overlaps between events and the observation period
+    padding_strategy: "zero" # Use 0s for missing values. Doesn't really matter as we mask invalid inputs
+    keywords: "default" # Use default (all SHARP keywords)
+    use_PCA: false # Deprecated
+    n_PCA_components: 0 # Deprecated

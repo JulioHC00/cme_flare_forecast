@@ -1,5 +1,0 @@
-name: "OneCycleLR"
-call_on: "batch"
-args:
-  max_lr: 0.01
-  epochs: ${train.n_epochs}
