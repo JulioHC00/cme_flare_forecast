@@ -1,5 +1,4 @@
 from .base_dataset import BaseDataset
-from cuml import PCA as cuPCA
 import pandas as pd
 import numpy as np
 import torch
@@ -112,7 +111,7 @@ class PreProcessSWANDataset:
         features_stds: Union[dict, None] = None,  # Same as means
         use_PCA: bool = False,
         n_PCA_components: Optional[int] = None,
-        PCA_object: Optional[cuPCA] = None,
+        PCA_object: Optional[int] = None,
         use_is_valid: bool = False,
         *args,  # Any other
         **kwargs,  # Any other
@@ -185,8 +184,8 @@ class PreProcessSWANDataset:
         use_only_active: bool,
         temp_db_id: str,
         use_PCA: bool,
-        n_PCA_components: Optional[int],
-        PCA_object: Optional[cuPCA],
+        n_PCA_components: Optional[int], # Deprecated
+        PCA_object: Optional[int], # Deprecated
         use_is_valid,
     ):
         """
@@ -451,9 +450,10 @@ class PreProcessSWANDataset:
 
         # Apply PCA if not already provided
         if self.PCA is None:
-            self.PCA = cuPCA(n_components=self.n_PCA_components)
-            self.PCA.fit(features)
-            print(f"Explained variance: {self.PCA.explained_variance_ratio_.sum()}")
+            raise DeprecationWarning("PCA is deprecated")
+            # self.PCA = cuPCA(n_components=self.n_PCA_components)
+            # self.PCA.fit(features)
+            # print(f"Explained variance: {self.PCA.explained_variance_ratio_.sum()}")
 
         transformed_data = self.PCA.transform(features)
 
