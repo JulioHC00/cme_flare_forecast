@@ -104,5 +104,7 @@ However you may run into errors and need to change some of the source code files
 If you want to know more about how the training of the models went but don't want to go through the hassle of running the training scripts, you can check the links below which contain the metrics we logged in wandb during training for all the models we trained
 
 For the flare forecasting models: [Flare models](https://wandb.ai/juliohc/Final%20Flare%20Class%20CV?nw=nwuserjulhcam)
+
 For the CME alone forecasting models: [CME alone models](https://wandb.ai/juliohc/Final%20CME%20Forecasting%20CV?nw=nwuserjulhcam)
+
 For the flare-CME association forecasting models: [flare-CME association models](https://wandb.ai/juliohc/Final%20Flare%20CME%20Assoc.?nw=nwuserjulhcam)
