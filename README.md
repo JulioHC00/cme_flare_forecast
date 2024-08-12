@@ -49,3 +49,60 @@ The model follows the transformer architecture as detailed in the paper. We make
 ## Training the model
 
 In order to train the models, we use the Adam optimizer and a cyclic scheduler that varies the learning rate from a minimum value up to a maximum value over a number of epochs and then back down to the base value. It also decreases the maximum value over each iteration. We use a cost-sensitive binary cross entropy loss function with logits, so our model outputs logits that need to be passed through a sigmoid to become the predictions. Additionally, we train using only event active regions for reasons detailed in the paper but we evaluate in all regions for a more realistic scenario. Full configurations are available in the `configs/` folder.
+
+## Reproducing our results
+
+### Prerequisites
+
+Start by cloning the repository to your local machine. You can do this by running the following command in your terminal:
+
+```bash
+git clone https://github.com/JulioHC00/cme_flare_forecast.git
+```
+
+Once you have the repository cloned, cd into the folder using `cd cme_flare_forecast` and create a virtual environment. This depends on your preferences. If you have conda you can do
+
+```bash
+conda create -n cme_flare_forecast python=3.12.2
+conda activate cme_flare_forecast
+```
+
+And then install the dependencies listed in `requirements.txt` by doing
+
+```bash
+pip install -r requirements.txt
+```
+
+### Reproducing the predictions and figures
+
+If you're only interested in reproducing or obtaining the predictions made by the models and the figures/tables from the paper, download `out.zip` from **LINK MISSING**, extract it and place the `out/` folder in the `cme_flare_forecast` folder. Then you can run the notebooks `get_validation_predictions.ipynb` _if you want to recalculate the predictions, otherwise you can directly_ run `paper_figures_and_tables.ipynb`.
+
+### Rerunning the training scripts
+
+While it is possible to rerun the training scripts by downloading `data.zip`, extracting this folder and placing it in the `cme_flare_forecast` folder, we don't actively support this. The training scripts are written and tested only on a single machine and may not work on a different machine/GPU/no GPU setup. If you want to rerun the scripts you can try downloading the training data as indicated above and doing e
+
+For training the flare forecasting models
+
+```bash
+python cross-validation.py --config-name cross_validation_flare_class
+```
+
+For training the CME independently of flare association forecasting models
+
+```bash
+python cross-validation.py --config-name cross_validation_cme_alone
+```
+
+For training the flare-CME association forecasting models
+
+```bash
+python cross-validation.py --config-name cross_validation_flare_cme_assoc
+```
+
+However you may run into errors and need to change some of the source code files.
+
+If you want to know more about how the training of the models went but don't want to go through the hassle of running the training scripts, you can check the links below which contain the metrics we logged in wandb during training for all the models we trained
+
+For the flare forecasting models: [Flare models](https://wandb.ai/juliohc/Final%20Flare%20Class%20CV?nw=nwuserjulhcam)
+For the CME alone forecasting models: [CME alone models](https://wandb.ai/juliohc/Final%20CME%20Forecasting%20CV?nw=nwuserjulhcam)
+For the flare-CME association forecasting models: [flare-CME association models](https://wandb.ai/juliohc/Final%20Flare%20CME%20Assoc.?nw=nwuserjulhcam)
