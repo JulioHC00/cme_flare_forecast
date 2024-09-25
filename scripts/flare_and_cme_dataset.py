@@ -249,9 +249,7 @@ class HarpsDatasetSlices:
         # Find indices in the flare_dates array that correspond to the defined time window
         start_index = bisect_left(self.flare_dates, per_start)
         end_index = bisect_right(self.flare_dates, per_end)
-
-        if end_index == len(self.flare_dates):
-            end_index -= 1
+        norm_end_index = min(end_index, len(self.flare_dates))
 
         # Initialize variables to track the presence of flares and their IDs
         has_flare_above_threshold = has_flare_below_threshold = False
@@ -270,9 +268,11 @@ class HarpsDatasetSlices:
         # Check if there are any flares within the defined time window
         if start_index < end_index:
             # Extract the class scores of flares within the time window
-            valid_flare_class_scores = self.flare_class_scores[start_index:end_index]
-            valid_flare_ids = self.flare_ids[start_index:end_index]
-            valid_flare_cme_ids = self.flare_cme_ids[start_index:end_index]
+            valid_flare_class_scores = self.flare_class_scores[
+                start_index:norm_end_index
+            ]
+            valid_flare_ids = self.flare_ids[start_index:norm_end_index]
+            valid_flare_cme_ids = self.flare_cme_ids[start_index:norm_end_index]
 
             threshold_mask = valid_flare_class_scores >= self.MIN_FLARE_CLASS
             cmes_mask = ~np.isnan(valid_flare_cme_ids)
@@ -330,10 +330,8 @@ class HarpsDatasetSlices:
         cme_nf_start_index = bisect_left(self.cme_dates, per_start)
         cme_nf_end_index = bisect_right(self.cme_dates, per_end)
 
-        if cme_nf_end_index == len(self.cme_dates):
-            cme_nf_end_index -= 1
-
         # Check if there are any flares within the defined time window
+        # In the case there's a single CME we need the equal
         if cme_nf_start_index < cme_nf_end_index:
             # Then there's a CME without flares
             has_cme_no_flare = True
@@ -630,7 +628,7 @@ def format_float_for_table_name(f):
         return str(f).replace(".", "_")
 
 
-def create_splits(conn, final_table_name, N_SPLITS, time_limit=600):
+def create_splits(conn, final_table_name, N_SPLITS, time_limit=300):
     # SQL query to fetch event counts and total rows
     query = f"""
     SELECT
