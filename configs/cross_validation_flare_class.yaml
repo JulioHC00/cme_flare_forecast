@@ -19,12 +19,12 @@ hydra:
     chdir: true # So working directory is in the output directory
 
 cross_validation:
-  db_path: ../../results.db
-  table: ${model.name}_${eval:'str(int(${data.main.T}))'}
-  checkpoints_extra_sub_folders: []
-  use_checkpoints: false
-  checkpoints_db_path: "/home/jhc/cmeml/out/flare_forecast/results.db"
-  checkpoints_table: "donahuetransformerforecast_24_train_active_validate_all_not_use_hist_params"
+  db_path: ../../results.db # db where results about the run are stored. relative to hydra.run.dir
+  table: ${model.name}_${eval:'str(int(${data.main.T}))'} # table where results are stored
+  checkpoints_extra_sub_folders: [] # if any, subfolder created for each entry. checkpoints stored there
+  use_checkpoints: false # whether checkpoints are to be loaded before training
+  checkpoints_db_path: "/home/jhc/cmeml/out/${problem_type}/results.db" # if so, this is pointing to a db that tells the code where to find the checkpoints
+  checkpoints_table: "rotary_transformer_${problem_type}_24_batchnorm" # and the table to use
 
 project: "Final Flare Class CV"
 problem_type: "flare_forecast"

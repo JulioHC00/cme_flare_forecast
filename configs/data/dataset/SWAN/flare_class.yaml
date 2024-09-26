@@ -1,0 +1,40 @@
+common_args: &common_args
+  db_path: ${local.db_path} # Path to the features.db path
+  T: ${data.main.T} # Forecast horizon
+  L: ${data.main.L} # Observation window length
+  S: ${data.main.S} # Observation step size
+  B: ${data.main.B} # Time after event where observations not allowed if ALLOW_OVERLAPS is False
+  C: ${data.main.C} # Cadence for the observations
+  MIN_FLARE_CLASS: ${data.main.MIN_FLARE_CLASS} # Mininum flare class to consider
+  ALLOW_OVERLAPS: ${data.main.ALLOW_OVERLAPS} # Allow events in the observation window
+  padding_strategy: ${data.main.padding_strategy} # Padding strategy, one of zero or mean. We use 0
+  keywords: ${data.main.keywords} # Keywords to use for training
+  not_keywords: ["Bhis1d"] # Keywords not to use for training
+  use_PCA: ${data.main.use_PCA} # Deprecated. Whether to use PCA
+  n_PCA_components: ${data.main.n_PCA_components} # Deprecated. Number of PCA components
+
+train:
+  name: ["swan", "flare_class"] # Type of dataset, here this would be a flare_class (flare forecast) dataset
+  args:
+    <<: *common_args # Import common args as above
+    mode: "train" # Training dataset
+    splits: [0, 1, 2, 3, 4, 5, 6, 7] # Splits to use, cross validation will override this
+    noise_level: 0.05 # Noise level to add to the data (noise_level * std of data)
+    use_only_active: true # Train using only event active regions
+
+val:
+  name: ["swan", "flare_class"]
+  args:
+    <<: *common_args
+    mode: "val"
+    splits: [8, 9] # Cross validation will override this
+    use_only_active: false
+
+# This must be kept but it's deprecated. Not used.
+test:
+  name: ["swan", "flare_class"]
+  args:
+    <<: *common_args
+    mode: "test"
+    splits: [9] # Cross validation will override this. Test not used.
+    use_only_active: false

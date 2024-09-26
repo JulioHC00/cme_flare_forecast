@@ -22,8 +22,8 @@ cross_validation:
   table: ${model.name}_${eval:'str(int(${data.main.T}))'} # Table where results are stored
   checkpoints_extra_sub_folders: [] # If any, subfolder created for each entry. Checkpoints stored there
   use_checkpoints: false # Whether checkpoints are to be loaded before training
-  checkpoints_db_path: "/home/jhc/cmeml/out/flare_forecast/results.db" # If so, this is pointing to a db that tells the code where to find the checkpoints
-  checkpoints_table: "rotary_transformer_24_batchnorm" # And the table to use
+  checkpoints_db_path: "/home/jhc/cmeml/out/${problem_type}/results.db" # If so, this is pointing to a db that tells the code where to find the checkpoints
+  checkpoints_table: "rotary_transformer_${problem_type}_24_batchnorm" # And the table to use
 
 project: "Final CME Forecasting CV" # Project for wandb
 problem_type: "cme_forecast" # Problem type

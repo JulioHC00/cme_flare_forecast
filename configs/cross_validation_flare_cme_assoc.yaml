@@ -19,12 +19,12 @@ hydra:
     chdir: true # So working directory is in the output directory
 
 cross_validation:
-  db_path: ../../results.db
-  table: ${model.name}_${eval:'str(int(${data.main.T}))'}
-  checkpoints_extra_sub_folders: []
-  use_checkpoints: true
-  checkpoints_db_path: "/home/jhc/cmeml/out/flare_forecast/results.db" # Requires the flare models to be trained first as they will be used as the starting point for the training of this model.
-  checkpoints_table: "rotary_transformer_24"
+  db_path: ../../results.db # db where results about the run are stored. relative to hydra.run.dir
+  table: ${model.name}_${eval:'str(int(${data.main.T}))'} # table where results are stored
+  checkpoints_extra_sub_folders: [] # if any, subfolder created for each entry. checkpoints stored there
+  use_checkpoints: true # whether checkpoints are to be loaded before training
+  checkpoints_db_path: "/unsafe2/jhc/cme_flare_forecast/out/flare_forecast/results.db" # if so, this is pointing to a db that tells the code where to find the checkpoints
+  checkpoints_table: "rotary_transformer_24" # and the table to use
 
 project: "Final Flare CME Assoc."
 problem_type: "flare_cme_assoc"
@@ -56,7 +56,7 @@ data:
   num_workers: 6
   main:
     T: 24
-    L: 12
+    L: 24
     S: 0.2
     B: 0
     C: 0.4
