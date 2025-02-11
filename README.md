@@ -1,4 +1,4 @@
-# TITLE OF PAPER
+# Should Coronal Mass Ejections be forecasted as a consequence of flares? A comparison of different approaches
 
 This repository contains the data, scripts to process the data, scripts to train the model and the model weights from the paper (**PAPER HERE**). Below we provide extensive details of how the data was processed, normalized and used to train the models referred to in the paper.
 
