@@ -8,7 +8,7 @@ The main data source for the features used in forecasting events are SHARP keywo
 
 ### Feature processing
 
-Data from SWAN is loaded into an sqlite database. For convenience this is already done and can be found in the file `data/features.db`, table `SWAN`. To the original columns of this table we add a `IS_VALID` boolean flag indicating whether that particular entry contains valid data. The validity is based on meeting the following two criteria:
+Data from SWAN is loaded into an sqlite database. For convenience this is already done and can be found by extracting `data.zip` from [doi.org/10.5281/zenodo.14851540](doi.org/10.5281/zenodo.14851540) inside the repository. The data is located at `data/features.db`, table `SWAN`. To the original columns of this table we add a `IS_VALID` boolean flag indicating whether that particular entry contains valid data. The validity is based on meeting the following two criteria:
 
 1. `IS_TMFI`, which indicates whether the magnetic field features can be trusted (see [SWAN-SF](https://www.nature.com/articles/s41597-020-0548-x) for details of what this means). Its value is 1 when they can be trusted and 0 otherwise. We require a value of 1.
 2. No SHARP keyword must have a missing value
@@ -75,7 +75,7 @@ pip install -r requirements.txt
 
 ### Reproducing the predictions and figures
 
-If you're only interested in reproducing or obtaining the predictions made by the models and the figures/tables from the paper, download `out.zip` from **LINK MISSING**, extract it and place the `out/` folder in the `cme_flare_forecast` folder. Then you can run the notebooks `get_validation_predictions.ipynb` _if you want to recalculate the predictions, otherwise you can directly_ run `paper_figures_and_tables.ipynb`.
+If you're only interested in reproducing or obtaining the predictions made by the models and the figures/tables from the paper, download `data.zip` and `out.zip` from [doi.org/10.5281/zenodo.14851540](doi.org/10.5281/zenodo.14851540), and extract them (so they become the `data/` and `out/` folders) in the `cme_flare_forecast` folder. Then you can run the notebooks `get_validation_predictions.ipynb` _if you want to recalculate the predictions, otherwise you can directly_ run `paper_figures_and_tables.ipynb`.
 
 ### Rerunning the training scripts
 
